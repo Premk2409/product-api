@@ -32,12 +32,16 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # 4. Build Docker image
       - name: Build Docker image
         run: |
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/product-service:latest .
 
-      # 5. Push Docker image to Docker Hub
       - name: Push Docker image
         run: |
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/product-service:latest
+
+      - name: Logout from Docker Hub
+        if: always()
+        uses: docker/login-action@v3
+        with:
+          logout: true
